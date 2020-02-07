@@ -1,0 +1,102 @@
+#include <stdio.h>
+#include <math.h>
+#include <io.h>
+#include <unistd.h>
+#include "altera_up_avalon_video_pixel_buffer_dma.h"
+#include <stdio.h>
+
+
+
+int main(void) {
+	/*=======  niNN vector de entrada =========*/
+	float niNN[5];
+	float DatosR[10];
+	float DatosP[10];
+	int x,y;
+	int color;
+	int Max=1300;
+	/*=======  niNN vector de entrada =========*/
+	int SS=1;
+	int count=0;
+	while(SS){
+	    	float real;
+	    	float output;
+	    	printf("Ingresar prediccion: \n");
+	    	scanf("%f",&output);
+	    	printf("Ingresar valor real: \n");
+	    	scanf("%f",&real);
+	    	DatosP[count]= (output*1000);
+	    	DatosR[count]=(real*1000);
+	    	printf("Ingrese 0 para salir \n");
+	        printf("Ingrese 1 para continuar \n");
+	        scanf("%i",&SS);
+
+	    	//Efectuación de Grafica
+
+	        if (count==0) {
+	        	alt_up_pixel_buffer_dma_dev *pixel_dev = NULL;
+	        	pixel_dev =  alt_up_pixel_buffer_dma_open_dev("/dev/PIXEL_BUFFER_DMA");
+	        	if(pixel_dev != NULL){
+	        	    printf("Finish load device structure\nVGA\n\n");}
+	        	alt_up_pixel_buffer_dma_clear_screen(pixel_dev,0);
+
+	        	for( x = 239; x >= 0; x = x - 1){
+	        	   for(y = 0; y < 320; y = y + 1){
+	        	    	color = 0x0000;
+	        	    	alt_up_pixel_buffer_dma_draw(pixel_dev, color, y, x);
+	        	    }
+	        	}
+
+	        	alt_up_pixel_buffer_dma_draw_box (pixel_dev, 3, 230, 310, 230, 0xFFFF, 0); //Horizontal
+	        	alt_up_pixel_buffer_dma_draw_box (pixel_dev, 307, 227, 307, 227, 0xFFFF, 0); //Horizontal
+	        	alt_up_pixel_buffer_dma_draw_line (pixel_dev, 307, 227, 310, 230, 0xFFFF, 0);
+	        	alt_up_pixel_buffer_dma_draw_box (pixel_dev, 307, 233, 307, 233, 0xFFFF, 0); //Horizontal
+	        	alt_up_pixel_buffer_dma_draw_line (pixel_dev, 307, 233, 310, 230, 0xFFFF, 0);
+
+	        	alt_up_pixel_buffer_dma_draw_box (pixel_dev, 7, 10, 7, 235, 0xFFFF, 0); //Vertical
+	        	alt_up_pixel_buffer_dma_draw_box (pixel_dev, 4, 13, 4, 13, 0xFFFF, 0); //Vertical
+	        	alt_up_pixel_buffer_dma_draw_line (pixel_dev, 7, 10, 4, 13, 0xFFFF, 0);
+	        	alt_up_pixel_buffer_dma_draw_box (pixel_dev, 10, 13, 10, 13, 0xFFFF, 0); //Vertical
+	        	alt_up_pixel_buffer_dma_draw_line (pixel_dev, 7, 10, 10, 13, 0xFFFF, 0);
+
+	        	//Coordenadas Eje Vertical
+	        	alt_up_pixel_buffer_dma_draw_box (pixel_dev,5, (230-200*240/Max),9,(230-200*240/Max), 0xFFFF, 0);
+	        	alt_up_pixel_buffer_dma_draw_box (pixel_dev,5, (230-400*240/Max),9,(230-400*240/Max), 0xFFFF, 0);
+	        	alt_up_pixel_buffer_dma_draw_box (pixel_dev,5, (230-600*240/Max),9,(230-600*240/Max), 0xFFFF, 0);
+	        	alt_up_pixel_buffer_dma_draw_box (pixel_dev,5, (230-800*240/Max),9,(230-800*240/Max), 0xFFFF, 0);
+	        	alt_up_pixel_buffer_dma_draw_box (pixel_dev,5, (230-1000*240/Max),9,(230-1000*240/Max), 0xFFFF, 0);
+	        	alt_up_pixel_buffer_dma_draw_box (pixel_dev,5, (230-1200*240/Max),9,(230-1200*240/Max), 0xFFFF, 0);
+	        	alt_up_pixel_buffer_dma_draw_box (pixel_dev,5, (230-1400*240/Max),9,(230-1400*240/Max), 0xFFFF, 0);
+
+	        	//Coordenadas Eje Horizontal
+	        	alt_up_pixel_buffer_dma_draw_box (pixel_dev,44,228,44,232, 0xFFFF, 0);
+	        	alt_up_pixel_buffer_dma_draw_box (pixel_dev,76,228,76,232, 0xFFFF, 0);
+	        	alt_up_pixel_buffer_dma_draw_box (pixel_dev,108, 228,108,232, 0xFFFF, 0);
+	        	alt_up_pixel_buffer_dma_draw_box (pixel_dev,140,228,140,232, 0xFFFF, 0);
+	        	alt_up_pixel_buffer_dma_draw_box (pixel_dev,172,228,172,232, 0xFFFF, 0);
+	        	alt_up_pixel_buffer_dma_draw_box (pixel_dev,204,228,204,232, 0xFFFF, 0);
+	        	alt_up_pixel_buffer_dma_draw_box (pixel_dev,236, 228,236,232, 0xFFFF, 0);
+	        	alt_up_pixel_buffer_dma_draw_box (pixel_dev,268, 228,268,232, 0xFFFF, 0);
+	        	alt_up_pixel_buffer_dma_draw_box (pixel_dev,300,228,300,232, 0xFFFF, 0);
+	        	alt_up_pixel_buffer_dma_draw_box (pixel_dev, 12, (230-DatosP[count]*240/Max), 13,(230-DatosP[count]*240/Max)+1, 0xFFE0, 0);
+	        }else if(count==1) {
+	        	alt_up_pixel_buffer_dma_dev *pixel_dev = NULL;
+	        	pixel_dev =  alt_up_pixel_buffer_dma_open_dev("/dev/PIXEL_BUFFER_DMA");
+	        	alt_up_pixel_buffer_dma_draw_box (pixel_dev, 12, (230-DatosR[count]*240/Max), 13,(230-DatosR[count]*240/Max)+1, 0xF800, 0);
+	        	alt_up_pixel_buffer_dma_draw_box (pixel_dev, 12+(31*count), (230-(DatosP[count]*240/Max)), 13+(31*count),(230-(DatosP[count]*240/Max))+1, 0xFFE0, 0);
+	        	alt_up_pixel_buffer_dma_draw_line (pixel_dev, 13+(31*(count-1)), (230-(DatosP[count-1]*240/Max))+1, 13+(31*count), (230-(DatosP[count]*240/Max)), 0xFFE0, 0);
+	        }
+	        else{
+	        	alt_up_pixel_buffer_dma_dev *pixel_dev = NULL;
+	        	pixel_dev =  alt_up_pixel_buffer_dma_open_dev("/dev/PIXEL_BUFFER_DMA");
+	        	alt_up_pixel_buffer_dma_draw_box (pixel_dev, 12+(31*(count-1)), (230-DatosR[count]*240/Max), 13+(31*(count-1)),(230-DatosR[count]*240/Max)+1, 0xF800, 0);
+	        	alt_up_pixel_buffer_dma_draw_box (pixel_dev, 12+(31*count), (230-(DatosP[count]*240/Max)), 13+(31*count),(230-(DatosP[count]*240/Max))+1, 0xFFE0, 0);
+	        	alt_up_pixel_buffer_dma_draw_line (pixel_dev, 13+(31*(count-1)), (230-(DatosP[count-1]*240/Max))+1, 13+(31*count), (230-(DatosP[count]*240/Max)), 0xFFE0, 0);
+	        	alt_up_pixel_buffer_dma_draw_line (pixel_dev, 13+(31*(count-2)), (230-(DatosR[count-1]*240/Max))+1, 13+(31*(count-1)), (230-(DatosR[count]*240/Max)), 0xF800, 0);
+	        }
+	        count=count+1;
+	        if (count==10){
+	        	count=0;
+	        }
+	    }
+}

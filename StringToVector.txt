@@ -1,0 +1,43 @@
+
+#include <stdio.h>
+#include <stdlib.h>
+#include<string.h>
+
+int main(void) {
+	float vector_1[] = {0,0,0};
+	char s[17] =",44.08,3.09,6.80," ;
+	char n[4]= "0000";
+	puts("!!!Funciona!!!"); /* prints !!!Hello World!!! */
+	int len = sizeof(s);
+	int c;
+	int vector_index= 0;
+	int index_min = 0;
+	int i;
+	int index_max;
+	float r;
+	float t;
+	  for (i = 1; i < len; ++i)
+	  {
+		  if ((s[i] == ',') && (i>1))
+		  {
+
+			  index_max = i;
+			  c = 0;
+			  while (c < index_max-index_min-1) {
+			        n[c] = s[index_min+c+1];
+			        c++;
+			  	  }
+			  index_min = index_max;
+			  r = atof(n);
+			  vector_1[vector_index]= r;
+			  vector_index++;
+			  t = t + r;
+			  printf("float value : %f\n" ,r);
+		  }
+	  }
+	  printf("total : %f\n" ,t);
+	  printf("Vector [1]  : %f\n" ,vector_1[0]);
+	  printf("Vector [2] : %4.2f\n" ,vector_1[1]);
+	  printf("Vector [3] : %4.2f\n" ,vector_1[2]);
+	return EXIT_SUCCESS;
+}
